@@ -1,24 +1,37 @@
+const { Categories } = require("./models/Categories");
+const Joi = require("joi");
 const express = require("express");
 const router = express.Router();
 
-const Categories = [
-  { _id: "5b21ca3eeb7f6fbccd471818", name: "Fruit" },
-  { _id: "5b21ca3eeb7f6fbccd471814", name: "Snacks" },
-  { _id: "5b21ca3eeb7f6fbccd471820", name: "Vegetables" },
-];
-
-router.get("/", (req, res) => {
-  return res.send(Categories);
+router.get("/", async (req, res) => {
+  const category = await Categories.find();
+  return res.send(category);
 });
 
-router.get("/:id", (req, res) => {
-  const categories = Categories.find(
-    (category) => category._id === req.params.id
-  );
-  if (!categories)
+router.get("/:id", async (req, res) => {
+  const category = await Categories.findById(req.params.id);
+  if (!category)
     return res.status(404).send("The Category with the given id is not found");
 
-  return res.send(categories);
+  return res.send(category);
 });
 
+router.post("/", (req, res) => {
+  const { error } = validateCategory(req.body);
+
+  if (error) return res.status(404).send(error.message);
+
+  const category = new Categories({
+    name: req.body.name,
+  });
+  category.save();
+  return res.send(category);
+});
+
+function validateCategory(category) {
+  const Schema = Joi.object({
+    name: Joi.string().required(),
+  });
+  return Schema.validate(category);
+}
 module.exports = router;

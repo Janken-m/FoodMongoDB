@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const express = require("express");
-const { Foods } = require("./models/Foods");
-const { Categories } = require("./models/Categories");
+const { Foods } = require("../models/Foods");
+const { Categories } = require("../models/Categories");
 
 const router = express.Router();
 

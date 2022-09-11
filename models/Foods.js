@@ -3,7 +3,7 @@ const { categoriesSchema } = require("../models/Categories");
 
 const foodsSchema = mongoose.Schema({
   name: { type: String, required: true },
-  category: categoriesSchema,
+  category: { categoriesSchema },
   numberInStock: { type: Number, required: true },
   price: { type: Number, required: true },
 });

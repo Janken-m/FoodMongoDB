@@ -2,7 +2,6 @@ const foods = require("./routes/foods");
 const categories = require("./routes/categories");
 const mongoose = require("mongoose");
 const express = require("express");
-const { string } = require("joi");
 const app = express();
 
 app.use(express.json());

@@ -1,6 +1,5 @@
-const Joi = require("joi");
 const express = require("express");
-const { Foods } = require("../models/Foods");
+const { Foods, validateFoods } = require("../models/Foods");
 const { Categories } = require("../models/Categories");
 
 const router = express.Router();
@@ -23,7 +22,7 @@ router.post("/", async (req, res) => {
 
   if (error) return res.status(400).send(error.message);
 
-  const category = await Categories.findById(req.params.id);
+  const category = await Categories.findById(req.params.category._id);
 
   const foodsIndb = new Foods({
     name: req.body.name,
@@ -67,16 +66,5 @@ router.delete("/:id", async (req, res) => {
 
   return res.send(foods);
 });
-
-function validateFoods(food) {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    category: { _id: Joi.allow(), name: Joi.required() },
-    numberInStock: Joi.number().required(),
-    price: Joi.number().required(),
-  });
-
-  return schema.validate(food);
-}
 
 module.exports = router;

@@ -1,5 +1,4 @@
-const { Categories } = require("../models/Categories");
-const Joi = require("joi");
+const { Categories, validateCategory } = require("../models/Categories");
 const express = require("express");
 const router = express.Router();
 
@@ -28,10 +27,4 @@ router.post("/", (req, res) => {
   return res.send(category);
 });
 
-function validateCategory(category) {
-  const Schema = Joi.object({
-    name: Joi.string().required(),
-  });
-  return Schema.validate(category);
-}
 module.exports = router;

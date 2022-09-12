@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 const foodsSchema = mongoose.Schema({
   name: { type: String, required: true },
-  category: { categoriesSchema },
+  category: categoriesSchema,
   numberInStock: { type: Number, required: true },
   price: { type: Number, required: true },
 });
@@ -14,7 +14,7 @@ const Foods = mongoose.model("food", foodsSchema);
 function validateFoods(food) {
   const schema = Joi.object({
     name: Joi.string().required(),
-    category: { _id: Joi.allow(), name: Joi.required() },
+    categoryId: Joi.string().required(),
     numberInStock: Joi.number().required(),
     price: Joi.number().required(),
   });

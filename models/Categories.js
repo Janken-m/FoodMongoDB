@@ -3,8 +3,7 @@ const Joi = require("joi");
 
 const categoriesSchema = mongoose.Schema({
   name: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    type: String,
     required: true,
   },
 });

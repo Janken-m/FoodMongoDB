@@ -22,7 +22,9 @@ router.post("/", async (req, res) => {
 
   if (error) return res.status(400).send(error.message);
 
-  const category = await Categories.findById(req.params.category._id);
+  const category = await Categories.findById(req.body.categoryId);
+  if (!category)
+    return res.status(404).send("There is no category with that Id");
 
   const foodsIndb = new Foods({
     name: req.body.name,

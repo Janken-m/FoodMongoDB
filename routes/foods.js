@@ -25,8 +25,14 @@ router.post("/", [auth, admin], async (req, res) => {
   if (error) return res.status(400).send(error.message);
   const category = await Categories.findById(req.body.categoryId);
 
+<<<<<<< HEAD
   if (!category)
     return res.status(400).send("Can not found category with that given id.");
+=======
+  const category = await Categories.findById(req.body.categoryId);
+  if (!category)
+    return res.status(404).send("There is no category with that Id");
+>>>>>>> 1b24dab19739dbea56ef47d50d3e64e49745a60e
 
   const foodsIndb = new Foods({
     name: req.body.name,

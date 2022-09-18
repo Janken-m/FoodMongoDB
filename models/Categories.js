@@ -4,11 +4,9 @@ const Joi = require("joi");
 const categoriesSchema = mongoose.Schema({
   name: {
     type: String,
-<<<<<<< HEAD
+
     minlength: 2,
     maxlength: 50,
-=======
->>>>>>> 1b24dab19739dbea56ef47d50d3e64e49745a60e
     required: true,
   },
 });

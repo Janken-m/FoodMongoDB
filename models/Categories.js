@@ -3,17 +3,18 @@ const Joi = require("joi");
 
 const categoriesSchema = mongoose.Schema({
   name: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    type: String,
+    minlength: 2,
+    maxlength: 50,
     required: true,
   },
 });
 
-const Categories = mongoose.model("Category", categoriesSchema);
+const Categories = mongoose.model("category", categoriesSchema);
 
 function validateCategory(category) {
   const Schema = Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string().min(2).max(50).required(),
   });
   return Schema.validate(category);
 }

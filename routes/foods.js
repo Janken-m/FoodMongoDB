@@ -1,6 +1,8 @@
 const express = require("express");
 const { Foods, validateFoods } = require("../models/Foods");
 const { Categories } = require("../models/Categories");
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 
 const router = express.Router();
 
@@ -17,12 +19,14 @@ router.get("/:id", async (req, res) => {
   return res.send(food);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validateFoods(req.body);
 
   if (error) return res.status(400).send(error.message);
+  const category = await Categories.findById(req.body.categoryId);
 
-  const category = await Categories.findById(req.params.category._id);
+  if (!category)
+    return res.status(400).send("Can not found category with that given id.");
 
   const foodsIndb = new Foods({
     name: req.body.name,
@@ -30,36 +34,41 @@ router.post("/", async (req, res) => {
     numberInStock: req.body.numberInStock,
     price: req.body.price,
   });
-  foodsIndb.save();
+  await foodsIndb.save();
   return res.send(foodsIndb);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", [auth, admin], async (req, res) => {
   const { error } = validateFoods(req.body);
 
   if (error) return res.status(400).send(error.message);
 
-  const category = await Categories.findById(req.params.id);
+  const category = await Categories.findById(req.body.categoryId);
+  //query update
+  // let food = await Foods.findById(req.params.id);
 
-  let food = Foods.findById(req.params.id);
-  // or
-  // let food = Foods.findByIdAndUpdate({  food.name = req.body.name;
-  // food.category = { _id: category._id, name: category.name };
-  // food.numberInStock = req.body.numberInStock;
-  // food.price = req.body.price;})
+  // update first
+  let food = Foods.findByIdAndUpdate(req.params.id, {
+    name: req.body.name,
+    category: { _id: category._id, name: category.name },
+    numberInStock: req.body.numberInStock,
+    price: req.body.price,
+  });
 
   if (!food)
     return res.status(404).send("The food with the given id is not found");
 
-  food.name = req.body.name;
-  food.category = { _id: category._id, name: category.name };
-  food.numberInStock = req.body.numberInStock;
-  food.price = req.body.price;
+  // food.name = req.body.name;
+  // food.category = { _id: category._id, name: category.name };
+  // food.numberInStock = req.body.numberInStock;
+  // food.price = req.body.price;
+
+  await food.save();
 
   return res.send(food);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
   const foods = await Foods.findByIdAndDelete(req.params.id);
   if (!foods)
     return res.status(404).send("The food with the given id is not found");

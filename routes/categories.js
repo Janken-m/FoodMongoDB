@@ -1,9 +1,11 @@
 const { Categories, validateCategory } = require("../models/Categories");
 const express = require("express");
 const router = express.Router();
+const admin = require("../middleware/admin");
+const auth = require("../middleware/auth");
 
 router.get("/", async (req, res) => {
-  const category = await Categories.find();
+  const category = await Categories.find().sort("name");
   return res.send(category);
 });
 
@@ -15,7 +17,7 @@ router.get("/:id", async (req, res) => {
   return res.send(category);
 });
 
-router.post("/", (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validateCategory(req.body);
 
   if (error) return res.status(404).send(error.message);
@@ -23,7 +25,7 @@ router.post("/", (req, res) => {
   const category = new Categories({
     name: req.body.name,
   });
-  category.save();
+  await category.save();
   return res.send(category);
 });
 

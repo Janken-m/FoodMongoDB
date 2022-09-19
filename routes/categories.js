@@ -25,8 +25,10 @@ router.post("/", [auth, admin], async (req, res) => {
   const category = new Categories({
     name: req.body.name,
   });
+
   await category.save();
-  return res.send(category);
+
+  res.send(category);
 });
 
 module.exports = router;

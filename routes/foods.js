@@ -34,7 +34,7 @@ router.post("/", [auth, admin], async (req, res) => {
     price: req.body.price,
   });
   await foodsIndb.save();
-  return res.send(foodsIndb);
+  return res.status(201).send(foodsIndb);
 });
 
 router.put("/:id", [auth, admin], async (req, res) => {

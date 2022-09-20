@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   return res.send(category);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", [auth, admin], async (req, res) => {
   const category = await Categories.findById(req.params.id);
   if (!category)
     return res.status(404).send("The Category with the given id is not found");
@@ -26,7 +26,7 @@ router.post("/", [auth, admin], async (req, res) => {
     name: req.body.name,
   });
   await category.save();
-  return res.send(category);
+  res.send(category);
 });
 
 module.exports = router;

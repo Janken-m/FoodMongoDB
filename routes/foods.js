@@ -34,7 +34,8 @@ router.post("/", [auth, admin], async (req, res) => {
     price: req.body.price,
   });
   await foodsIndb.save();
-  return res.send(foodsIndb);
+
+  return res.status(201).send(foodsIndb);
 });
 
 router.put("/:id", [auth, admin], async (req, res) => {
@@ -47,7 +48,7 @@ router.put("/:id", [auth, admin], async (req, res) => {
   // let food = await Foods.findById(req.params.id);
 
   // update first
-  let food = Foods.findByIdAndUpdate(req.params.id, {
+  let food = await Foods.findByIdAndUpdate(req.params.id, {
     name: req.body.name,
     category: { _id: category._id, name: category.name },
     numberInStock: req.body.numberInStock,

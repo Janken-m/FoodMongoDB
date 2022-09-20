@@ -1,17 +1,22 @@
 const { validate, User } = require("../models/User");
 const bcrypt = require("bcrypt");
-// const auth = require("../middleware/auth");
-// const admin = require("../middleware/admin");
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const express = require("express");
 const router = express.Router();
 
-// router.get("/me", [auth, admin], async (req, res) => {
-//   const user = await User.findById(req.user._id).select("-password");
+router.get("/me", [auth, admin], async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
 
-//   if (!user) return res.status(400).send("User not found");
+  if (!user) return res.status(400).send("User not found");
 
-//   return res.send(user);
-// });
+  return res.send(user);
+});
+
+router.get("/allUsers", [auth, admin], async (req, res) => {
+  const allUser = await User.find().select("-password -_id -__v -isAdmin");
+  res.send(allUser);
+});
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);

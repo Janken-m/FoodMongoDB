@@ -34,10 +34,7 @@ router.post("/", [auth, admin], async (req, res) => {
     price: req.body.price,
   });
   await foodsIndb.save();
-<<<<<<< HEAD
 
-=======
->>>>>>> 1fe148f9c1ed202aa9fe7a82ea1bc9b2cf2cf822
   return res.status(201).send(foodsIndb);
 });
 

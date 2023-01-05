@@ -17,7 +17,7 @@ router.get("/:id", [auth, admin], async (req, res) => {
   return res.send(category);
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = validateCategory(req.body);
 
   if (error) return res.status(404).send(error.message);
@@ -27,10 +27,7 @@ router.post("/", [auth, admin], async (req, res) => {
   });
 
   await category.save();
-<<<<<<< HEAD
-=======
 
->>>>>>> 1fe148f9c1ed202aa9fe7a82ea1bc9b2cf2cf822
   res.send(category);
 });
 
